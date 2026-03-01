@@ -168,7 +168,6 @@ http://localhost:8000
 
 -   Some websites block automated requests\
 -   No headless browser rendering implemented\
--   PDF parsing optional and not included\
 -   Financial extraction relies on regex heuristics\
 -   No distributed crawling or scheduling
 
@@ -179,7 +178,6 @@ http://localhost:8000
 -   Retry with exponential backoff\
 -   Rotating user-agents\
 -   Headless browser support (Playwright/Selenium)\
--   PDF parsing integration\
 -   Database integration (PostgreSQL/Snowflake)\
 -   Docker containerization\
 -   Airflow orchestration\
