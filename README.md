@@ -11,9 +11,7 @@ Submission For: SecondaryLink Interview Project
 <img width="1896" height="791" alt="image" src="https://github.com/user-attachments/assets/8ef46708-d079-45d0-8726-89a6edb9a122" />
 
 
-This project implements a repeatable data ingestion pipeline that
-extracts high-signal, explicitly stated information from public company
-web pages and normalizes it into structured, analytics-ready datasets.
+This project implements a repeatable data ingestion pipeline that extracts high-signal, explicitly stated information from public company web pages and normalizes it into structured, analytics-ready datasets. The accompanying dashboard provides full pipeline visibility by displaying total runs, successful document fetches, failed fetches, and overall success rate. It also lists failed documents along with the associated error reason for transparency. Successfully processed documents can be selected to view their extracted structured and generic data, enabling traceability from source URL to normalized output.
 
 The pipeline:
 
