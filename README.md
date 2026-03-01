@@ -184,7 +184,7 @@ http://localhost:8000
 ## Author
 
 Yashkumar Patel\
-Microsoft Certified Data Engineer\
+AWS & Microsoft Certified Data Engineer\
 Google Certified Data Analyst
 
 Built as part of the SecondaryLink Data Discovery interview project.
