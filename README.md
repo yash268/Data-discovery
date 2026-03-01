@@ -8,6 +8,8 @@ Submission For: SecondaryLink Interview Project
 
 ## Project Overview
 <img width="1897" height="817" alt="image" src="https://github.com/user-attachments/assets/d0907d29-5914-4e85-9316-991685f639d4" />
+<img width="1896" height="791" alt="image" src="https://github.com/user-attachments/assets/8ef46708-d079-45d0-8726-89a6edb9a122" />
+
 
 This project implements a repeatable data ingestion pipeline that
 extracts high-signal, explicitly stated information from public company
