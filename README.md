@@ -1,12 +1,12 @@
-# 📊 SecLink Data Discovery Pipeline
+# SecLink Data Discovery Pipeline
 
-**Author:** Yashkumar Patel\
-**Project Type:** Data Engineering / Web Data Ingestion\
-**Submission For:** SecondaryLink Interview Project
+Author: Yashkumar Patel\
+Project Type: Data Engineering / Web Data Ingestion\
+Submission For: SecondaryLink Interview Project
 
 ------------------------------------------------------------------------
 
-## 🚀 Project Overview
+## Project Overview
 
 This project implements a repeatable data ingestion pipeline that
 extracts high-signal, explicitly stated information from public company
@@ -27,7 +27,7 @@ analytics-readiness.
 
 ------------------------------------------------------------------------
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 companies.csv\
 ↓\
@@ -43,7 +43,7 @@ Dashboard (Vanilla JS + Tailwind)
 
 ------------------------------------------------------------------------
 
-## 📂 Project Structure
+## Project Structure
 
 data-discovery/\
 │\
@@ -64,16 +64,16 @@ data-discovery/\
 
 ------------------------------------------------------------------------
 
-## 🔍 What the Pipeline Extracts
+## What the Pipeline Extracts
 
-### 1️⃣ Document Metadata
+### 1. Document Metadata
 
 -   Source URL\
 -   Crawl timestamp\
 -   Content type\
 -   Company association
 
-### 2️⃣ Structured Financial Signals (When Present)
+### 2. Structured Financial Signals (When Present)
 
 For earnings-related documents: - Revenue statements\
 - Operating income (GAAP / Non-GAAP)\
@@ -81,7 +81,7 @@ For earnings-related documents: - Revenue statements\
 - Growth percentages\
 - Financial guidance references
 
-### 3️⃣ Generic High-Signal Facts
+### 3. Generic High-Signal Facts
 
 -   Numeric statements\
 -   Percentage growth\
@@ -99,30 +99,26 @@ This enables downstream analytics, warehousing, and BI integration.
 
 ------------------------------------------------------------------------
 
-## 📦 Output Files
+## Output Files
 
-### companies.jsonl
-
+companies.jsonl\
 Normalized company-level data.
 
-### documents.jsonl
-
+documents.jsonl\
 One record per successfully fetched document.
 
-### facts.jsonl
-
+facts.jsonl\
 High-signal extracted facts in normalized structure.
 
-### run_summary.json
-
+run_summary.json\
 Pipeline execution metrics including: - Companies processed - Successful
 documents - Failed documents - Facts extracted - Completion timestamp
 
 ------------------------------------------------------------------------
 
-## ⚙️ How to Run
+## How to Run
 
-### 1️⃣ Create Virtual Environment
+### 1. Create Virtual Environment
 
 Windows: python -m venv .venv\
 .venv`\Scripts`{=tex}`\activate  `{=tex}
@@ -130,23 +126,17 @@ Windows: python -m venv .venv\
 Mac/Linux: python3 -m venv .venv\
 source .venv/bin/activate
 
-------------------------------------------------------------------------
-
-### 2️⃣ Install Dependencies
+### 2. Install Dependencies
 
 pip install -r python/requirements.txt
 
-------------------------------------------------------------------------
-
-### 3️⃣ Run Pipeline
+### 3. Run Pipeline
 
 python python/pipeline.py --input data/companies.csv --out out
 
 Outputs will be written to the out/ directory.
 
-------------------------------------------------------------------------
-
-### 4️⃣ Launch Dashboard
+### 4. Launch Dashboard
 
 Serve locally:
 
@@ -158,17 +148,17 @@ http://localhost:8000
 
 ------------------------------------------------------------------------
 
-## 🧠 Design Decisions & Tradeoffs
+## Design Decisions and Tradeoffs
 
-✔ Flexible "facts-style" schema instead of rigid predefined columns\
-✔ Explicit extraction only (no inference beyond source content)\
-✔ Error logging without pipeline crashes\
-✔ JSONL outputs for streaming compatibility\
-✔ Separation of companies, documents, and facts for scalability
+-   Flexible "facts-style" schema instead of rigid predefined columns\
+-   Explicit extraction only (no inference beyond source content)\
+-   Error logging without pipeline crashes\
+-   JSONL outputs for streaming compatibility\
+-   Separation of companies, documents, and facts for scalability
 
 ------------------------------------------------------------------------
 
-## ⚠ Known Limitations
+## Known Limitations
 
 -   Some websites block automated requests\
 -   No headless browser rendering implemented\
@@ -178,7 +168,7 @@ http://localhost:8000
 
 ------------------------------------------------------------------------
 
-## 🔮 Potential Improvements
+## Potential Improvements
 
 -   Retry with exponential backoff\
 -   Rotating user-agents\
@@ -191,7 +181,7 @@ http://localhost:8000
 
 ------------------------------------------------------------------------
 
-## 👤 Author
+## Author
 
 Yashkumar Patel\
 Microsoft Certified Data Engineer\
