@@ -1,0 +1,33 @@
+{
+  "companies_processed": 10,
+  "documents_processed": 10,
+  "facts_extracted": 5379,
+  "errors": [
+    {
+      "company": "Amazon.com, Inc._1",
+      "url": "http://ir.aboutamazon.com/news-release/news-release-details/2024/Amazon.com-Announces-First-Quarter-Results-68b9258cd",
+      "error": "fetch_failed"
+    },
+    {
+      "company": "Amazon.com, Inc._2",
+      "url": "https://ir.aboutamazon.com/news-release/news-release-details/2024/Amazon.com-Announces-Second-Quarter-Results/default.aspx",
+      "error": "fetch_failed"
+    },
+    {
+      "company": "Amazon.com, Inc._3",
+      "url": "http://ir.aboutamazon.com/news-release/news-release-details/2024/Amazon-com-Announces-Third-Quarter-Results",
+      "error": "fetch_failed"
+    },
+    {
+      "company": "Amazon.com, Inc._4",
+      "url": "http://ir.aboutamazon.com/news-release/news-release-details/2025/Amazon-com-Announces-Fourth-Quarter-Results",
+      "error": "fetch_failed"
+    },
+    {
+      "company": "Tesla",
+      "url": "https://ir.tesla.com/press-release/tesla-fourth-quarter-2025-production-deliveries-deployments",
+      "error": "fetch_failed"
+    }
+  ],
+  "completed_at": "2026-03-01T00:53:30.937772Z"
+}

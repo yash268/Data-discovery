@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Discovery Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen p-8">
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    
+
+    <center><h1 class="text-3xl font-bold">Data Discovery Dashboard</h1></center>
+    <!-- Project Attribution Section -->
+    <div class="mt-16 bg-white p-6 rounded-2xl shadow text-center">
+      
+      <div class="mt-2 text-lg font-semibold">
+        Developed by Yashkumar Patel
+      </div>
+      <div class="text-gray-600 mt-1">
+        Interview Project for SecondaryLink
+      </div>
+      <div class="text-xs text-gray-400 mt-3">
+        Data Pipeline • Web Scraping • Structured & Generic Information Extraction • Dashboard Visualization
+      </div>
+    </div>
+
+    <!-- Pipeline Summary -->
+    <div id="summarySection" class="grid grid-cols-1 md:grid-cols-4 gap-4"></div>
+
+    <!-- Failed Runs Section -->
+    <div id="errorSection" class="hidden bg-red-50 border border-red-200 p-4 rounded-2xl"></div>
+
+    <!-- Search -->
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Search company..."
+      class="w-full p-3 border rounded-xl shadow-sm"
+    />
+
+    <!-- Companies Grid -->
+    <div id="companiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+    <!-- Details Section -->
+    <div id="detailsSection" class="hidden space-y-6">
+
+      <h2 id="detailsTitle" class="text-2xl font-bold"></h2>
+
+      <!-- Documents -->
+      <div>
+        <h3 class="text-xl font-semibold mb-2">Documents</h3>
+        <div id="documentsContainer" class="space-y-4"></div>
+      </div>
+
+      <!-- Facts -->
+      <div>
+        <h3 class="text-xl font-semibold mb-2">Extracted Facts</h3>
+        <div id="factsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      </div>
+
+      <button
+        onclick="goBack()"
+        class="px-4 py-2 bg-black text-white rounded-xl shadow"
+      >
+        Back to Companies
+      </button>
+
+    </div>
+
+    
+
+  </div>
+
+<script>
+let companies = [];
+let documents = [];
+let facts = [];
+let summary = {};
+
+function cacheBuster(path) {
+  return path + "?t=" + new Date().getTime();
+}
+
+async function loadJSONL(path) {
+  const res = await fetch(cacheBuster(path));
+  const text = await res.text();
+  return text
+    .split("\n")
+    .filter(Boolean)
+    .map(line => JSON.parse(line));
+}
+
+async function init() {
+
+  companies = await loadJSONL("out/companies.jsonl");
+  documents = await loadJSONL("out/documents.jsonl");
+  facts = await loadJSONL("out/facts.jsonl");
+
+  const summaryRes = await fetch(cacheBuster("out/run_summary.json"));
+  summary = await summaryRes.json();
+
+  renderSummary();
+  renderErrors();
+  renderCompanies(companies);
+}
+
+function renderSummary() {
+  const section = document.getElementById("summarySection");
+
+  const successful = summary.documents_processed || 0;
+  const failed = summary.errors ? summary.errors.length : 0;
+  const total = successful + failed;
+
+  const factsExtracted = summary.facts_extracted || 0;
+
+  const successRate = total > 0
+    ? ((successful / total) * 100).toFixed(1)
+    : 0;
+
+  section.innerHTML = `
+    <div class="bg-white p-4 rounded-2xl shadow">
+      <div class="text-sm text-gray-500">Total Documents</div>
+      <div class="text-2xl font-bold">${total}</div>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl shadow">
+      <div class="text-sm text-gray-500">Successful</div>
+      <div class="text-2xl font-bold text-green-600">${successful}</div>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl shadow">
+      <div class="text-sm text-gray-500">Failed</div>
+      <div class="text-2xl font-bold text-red-600">${failed}</div>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl shadow">
+      <div class="text-sm text-gray-500">Success Rate</div>
+      <div class="text-2xl font-bold">${successRate}%</div>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl shadow md:col-span-4">
+      <div class="text-sm text-gray-500">Facts Extracted</div>
+      <div class="text-2xl font-bold">${factsExtracted}</div>
+    </div>
+  `;
+}
+
+function renderErrors() {
+  const errorSection = document.getElementById("errorSection");
+
+  if (!summary.errors || summary.errors.length === 0) {
+    errorSection.classList.add("hidden");
+    return;
+  }
+
+  errorSection.classList.remove("hidden");
+
+  let errorHtml = `<div class="font-semibold text-red-700 mb-2">
+    Failed Runs (${summary.errors.length})
+  </div>`;
+
+  summary.errors.forEach(err => {
+    errorHtml += `
+      <div class="text-sm mb-2">
+        <div><strong>Company:</strong> ${err.company}</div>
+        <div class="break-words"><strong>URL:</strong> ${err.url}</div>
+        <div><strong>Error:</strong> ${err.error}</div>
+      </div>
+      <hr class="my-2 border-red-200">
+    `;
+  });
+
+  errorSection.innerHTML = errorHtml;
+}
+
+function renderCompanies(data) {
+  const grid = document.getElementById("companiesGrid");
+  grid.innerHTML = "";
+
+  data.forEach(company => {
+    const card = document.createElement("div");
+    card.className = "bg-white p-4 rounded-2xl shadow hover:shadow-lg cursor-pointer transition";
+    card.innerHTML = `
+      <div class="text-xl font-semibold">${company.company_name}</div>
+      <div class="text-sm text-gray-500">Company ID: ${company.company_id}</div>
+    `;
+    card.onclick = () => showDetails(company);
+    grid.appendChild(card);
+  });
+}
+
+function showDetails(company) {
+  document.getElementById("companiesGrid").classList.add("hidden");
+  document.getElementById("detailsSection").classList.remove("hidden");
+  document.getElementById("detailsTitle").innerText = company.company_name;
+
+  renderDocuments(company.company_id);
+  renderFacts(company.company_id);
+}
+
+function renderDocuments(companyId) {
+  const container = document.getElementById("documentsContainer");
+  container.innerHTML = "";
+
+  const companyDocs = documents.filter(d => d.company_id === companyId);
+
+  if (companyDocs.length === 0) {
+    container.innerHTML = "<div class='text-gray-500'>No documents found.</div>";
+    return;
+  }
+
+  companyDocs.forEach(doc => {
+    const card = document.createElement("div");
+    card.className = "bg-white p-4 rounded-xl shadow";
+    card.innerHTML = `
+      <div class="text-sm font-semibold">Source URL:</div>
+      <div class="text-xs text-blue-600 break-words">${doc.source_url}</div>
+      <div class="text-xs text-gray-500 mt-1">Crawled At: ${doc.crawl_timestamp}</div>
+      <div class="text-xs text-gray-500">Content Type: ${doc.content_type || "unknown"}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function renderFacts(companyId) {
+  const grid = document.getElementById("factsGrid");
+  grid.innerHTML = "";
+
+  const companyFacts = facts.filter(f => f.company_id === companyId);
+
+  if (companyFacts.length === 0) {
+    grid.innerHTML = "<div class='text-gray-500'>No facts extracted.</div>";
+    return;
+  }
+
+  companyFacts.forEach(fact => {
+    const card = document.createElement("div");
+    card.className = "bg-white p-4 rounded-2xl shadow";
+    card.innerHTML = `
+      <div class="text-xs font-semibold text-gray-500 uppercase">${fact.fact_category}</div>
+      ${fact.label ? `<div class='text-sm font-medium mt-1'>Label: ${fact.label}</div>` : ""}
+      ${fact.value_raw ? `<div class='text-sm mt-1'>Raw: ${fact.value_raw}</div>` : ""}
+      ${fact.value_numeric !== null && fact.value_numeric !== undefined ? `<div class='text-sm mt-1'>Numeric: ${fact.value_numeric}</div>` : ""}
+      ${fact.unit ? `<div class='text-sm mt-1'>Unit: ${fact.unit}</div>` : ""}
+      ${fact.context_snippet ? `<div class='text-xs text-gray-400 mt-2 break-words'>Context: ${fact.context_snippet}</div>` : ""}
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function goBack() {
+  document.getElementById("detailsSection").classList.add("hidden");
+  document.getElementById("companiesGrid").classList.remove("hidden");
+}
+
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  const term = e.target.value.toLowerCase();
+  const filtered = companies.filter(c =>
+    c.company_name.toLowerCase().includes(term)
+  );
+  renderCompanies(filtered);
+});
+
+init();
+</script>
+
+</body>
+</html>
